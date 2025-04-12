@@ -1,0 +1,62 @@
+﻿<Window x:Class="InventoryWpf.Views.AddEditItemWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:InventoryWpf.ViewModels"
+        Title="Add / Edit Item" Height="350" Width="400" WindowStartupLocation="CenterOwner"
+        Background="#F2F2F2">
+    <Window.DataContext>
+        <vm:InventoryItemViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding (Validation.Errors)[0].ErrorContent, 
+                            RelativeSource={RelativeSource Self}}"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Item Name -->
+        <TextBlock Text="Name:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox Grid.Column="1" Margin="5" Text="{Binding Item.Name, UpdateSourceTrigger=PropertyChanged,
+                ValidatesOnDataErrors=True, NotifyOnValidationError=True}" />
+
+        <!-- Category -->
+        <TextBlock Grid.Row="1" Text="Category:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Item.Category, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!-- Stock -->
+        <TextBlock Grid.Row="2" Text="Stock:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Margin="5"  PreviewTextInput="NumberOnly_PreviewTextInput" Text="{Binding Item.StockQuantity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" >
+           
+        </TextBox>
+
+        <!-- Last Updated (read-only for Edit mode) -->
+        <TextBlock Grid.Row="3" Text="Last Updated:" FontWeight="Bold" VerticalAlignment="Center" Margin="0,5"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding Item.LastUpdated}" />
+
+        <!-- Save Button -->
+        <Button Grid.Row="4" Grid.ColumnSpan="2" Content="Save"
+                Command="{Binding SaveCommand}"
+                HorizontalAlignment="Center" Width="100" Margin="10" 
+                Background="#2D89EF" Foreground="White" FontWeight="Bold"/>
+    </Grid>
+</Window>
